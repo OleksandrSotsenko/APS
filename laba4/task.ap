@@ -1,0 +1,43 @@
+INCLUDE <../include.ap>
+INCLUDE <../include/array.ap>
+
+NAMES P,fun_b,fun_intl,fun_dif,T1,T2;
+MARKS INTG(3), DIFF(3);
+
+T1 := INTG(2, 4, x^2);
+T2 := DIFF(2, 6, x^3 + 5 * x - 8);
+
+fun_b := proc(x)
+(
+    (x < 0) -> return((-1) * x);
+    return (x)
+);
+
+fun_dif := proc(K)loc(H)(
+    H := 0.01;
+    (arg(K, 1) == 1) -> 
+        return(
+            (subs(x=(arg(K, 2) + H), arg(K, 3)) - subs(x = (arg(K, 2) - H), arg(K, 3)) ) / 2.0 * H
+        );
+
+        return(
+            (fun_dif(DIFF(arg(K, 1) - 1,arg(K, 2) + H,arg(K, 3))) - fun_dif(DIFF(arg(K, 1) - 1,arg(K, 2) - H, arg(K, 3)))) / 2.0 * H
+        )
+
+);
+
+fun_intl := proc(K) loc(H, P, V, v, i)(
+    P:= 100;
+    H := fun_b(arg(K, 1) - arg(K, 2)) / P * 1.0;
+    V := 0;
+    for(i := arg(K, 1) + H, i < arg(K, 2),  i := i + H,
+        v := subs(x = i,arg(K, 3));
+        V := V + v
+    );
+    return (H * (((subs(x = arg(K, 1), arg(K, 3)) + subs(x = arg(K, 2), arg(K, 3))) / 2) + V))
+);
+
+task := (
+    prn(fun_intl(T1)),
+    prn(fun_dif(T2))
+);

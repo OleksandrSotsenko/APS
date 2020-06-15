@@ -1,0 +1,37 @@
+INCLUDE <../include.ap>
+INCLUDE <CNF.ap>
+INCLUDE <DNF.ap>
+
+NAMES neg_rs,os_rs,T;
+
+MARKS
+    SHF (2,26,"|"),
+    PRS (2,25,"Y");
+
+neg_rs := rs(x)(
+   x = ~(x)
+);
+
+os_rs := rs(x, y)(
+    (x <=> y) = ((x -> y) & (y -> x)),
+    (x -> y) = (~(x) |/ y),
+    ~(~(x)) = x,
+    (x & y) = conj_rs(x, y),
+    (x | y) = disj_rs(x, y),
+    (x | y) = (~(x) |/ ~(y)),
+    (x Y y) = (~(x) & ~(y)),
+    ~(~(x)) = x,
+    ~(x |/  y) = (~(x) & ~(y)),
+    ~(x  &  y) = (~(x) |/ ~(y)),
+    ~(x <=> y) = (~(x -> y) |/ ~(y -> x)),
+    ~(x  -> y) = (x & ~(y)),
+    ~(x | y) = (x & y),
+    ~(x Y y) = (x |/ y)
+);
+
+T := (1 -> 1);
+
+task := (
+    applytb(T, os_rs),
+    prn(T)
+);

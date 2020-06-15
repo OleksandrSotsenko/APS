@@ -1,0 +1,18 @@
+INCLUDE <../include.ap>
+
+NAMES sqr, P;
+
+MARK F(1);
+
+P := F(256);
+
+sqr := rs(x, y, z)(
+    f(x, y, y) = y,
+    f(x, y, z) = f(x, (y + x / y) / 2, x / y),
+    F(x) = f(x, (x / 2 + x / (x / 2)) / 2, x / (x / 2 + x / (x / 2)) / 2)
+);
+
+task := (
+    applytb(P, sqr),
+    prn(P)
+);

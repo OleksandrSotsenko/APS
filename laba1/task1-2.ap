@@ -1,0 +1,15 @@
+INCLUDE <../include.ap>
+
+NAMES rsGCD,G;
+
+G := (45, 60);
+rsGCD := rs(x, y) (
+    (x, x) = x,
+    (x < y) -> ((x, y) = (x, y - x)),
+    (x, y) = (x - y, y)
+);
+
+task := (
+    applr(G, rsGCD), 
+    prn(G)
+);
